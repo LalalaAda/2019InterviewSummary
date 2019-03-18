@@ -184,7 +184,34 @@
    4. 原型链  class <br>
       - class<br>
          https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Classes<br>
-         
+         类实际上是个“特殊的函数”，就像你能够定义的函数表达式和函数声明一样，类语法有两个组成部分：类表达式和类声明。<br>
+         函数声明和类声明之间的一个重要区别是函数声明会提升，类声明不会。你首先需要声明你的类，然后访问它，否则像下面的代码会抛出一个ReferenceError：
+         ```javascript
+         let p = new Per(); // ReferenceError
+         class per() {  // 类声明
+            constructor(height, width){
+               this.height = height;
+               this.width = width;
+            }
+         }
+         // 类表达式
+         /* 匿名类 */ 
+         let Rectangle = class {
+            constructor(height, width) {
+               this.height = height;
+               this.width = width;
+            }
+         };
+         /* 命名的类 */ 
+         let Rectangle = class Rectangle {
+            constructor(height, width) {
+               this.height = height;
+               this.width = width;
+            }
+         };
+         ```
+      //TODO 完善 <br>
+      //原型链继承 https://blog.csdn.net/zhuanyemanong/article/details/80325387
 
 
 
@@ -208,4 +235,85 @@
    <div align="center"> <img src="./imgs/vuelifecycle.png" width="120" height="300" alt="vue生命周期图" /></div>
 
 2. react 生命周期 <br>
-   1.
+   1. componentWillMount();
+   2. render();
+   3. componentDidMount();
+   4. componentWillReceiveProps();
+   5. shouldComponentUpdate();
+   6. componentWillUpdate();
+   7. render();
+   8. componentDidUpdate();
+   9. componentWillUnmount();
+   <div align="center"> <img src="./imgs/reactlifecycle.png" width="80%" height="auto" alt="react生命周期图" /></div>
+
+3. 小程序 生命周期<br>
+   1. onLoad();
+   2. onShow();
+   3. onReady();
+   4. onHide();
+   5. onShow();
+   6. onUnload();
+      <div align="center"> <img src="./imgs/wxprogramlifecycle.png" width="80%" height="auto" alt="小程序生命周期图" /></div><br>
+   - 组件生命周期
+      ```javascript
+      Component({
+         lifetimes: {
+            attached() {
+               // 在组件实例进入页面节点树时执行
+            },
+            detached() {
+               // 在组件实例被从页面节点树移除时执行
+            },
+            ready() {}, //在组件在视图层布局完成后执行
+            moved() {}, //在组件实例被移动到节点树另一个位置时执行
+            error(e) {}, //每当组件方法抛出错误时执行
+         },
+         // 以下是旧式的定义方式，可以保持对 <2.2.3 版本基础库的兼容
+         attached() {},
+         detached() {},
+         // ...
+      })
+      ```
+   - 登录流程
+      <div align="center"> <img src="./imgs/wxapi-login.jpg" width="80%" height="auto" alt="小程序登录时序图" /></div><br>
+
+4. vuex <br>
+   <div align="center"> <img src="./imgs/vuex.png" width="80%" height="auto" alt="vuex图" /></div>
+
+   ```javascript
+   // 一段busy后台的代码示例
+   import Vue from "vue";
+   import Vuex from "vuex";
+   import xblmessage from "./module/xblmessage";
+   import * as API from "@/api/xblmessage";
+   Vue.use(Vuex);
+   export default new Vuex.Store({
+      state: {
+         list: [],
+      },
+      mutations: {
+         saveList(state, list){
+            state.list = list;
+         }
+      },
+      actions: {
+         fetchList({state, commit}, params) {
+            API.delXBLMessage(params)
+               .then(() => {
+                  const newList = state.list.filter(item => item._id !== params.id);
+                  commit("saveList", newList);
+               })
+               .catch(e => {
+                  return Error(e);
+               });
+         }
+      },
+      modules: {
+         xblmessage,
+      }
+   });
+   ```
+5. dva <br>
+   https://dvajs.com/guide/concepts.html#%E6%95%B0%E6%8D%AE%E6%B5%81%E5%90%91 <br>
+
+   
