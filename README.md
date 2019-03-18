@@ -133,10 +133,58 @@
          * this在运行时确定
       <br>
    2. 变量提升 <br>
-      - 
+      js只有函数作用域 没有块级作用域
+      let const 用暂时性死区实现块级作用域 
    3. 箭头函数 <br>
-   4. 原型链 <br>
-
+      箭头函数表达式的语法比函数表达式更简洁，并且没有自己的this，arguments，super或 new.target。这些函数表达式更适用于那些本来需要匿名函数的地方，并且它们不能用作构造函数。
+      https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/Arrow_functions<br>
+      箭头函数不会创建自己的this,它只会从自己的作用域链的上一层继承this。<br>
+      由于 箭头函数没有自己的this指针，通过 call() 或 apply() 方法调用一个函数时，只能传递参数（不能绑定this---译者注），他们的第一个参数会被忽略。（这种现象对于bind方法同样成立---译者注）<br>
+      箭头函数不绑定Arguments 对象。因此，在本示例中，arguments只是引用了封闭作用域内的arguments:
+      ```javascript
+      var arguments = [1, 2, 3];
+      var arr = () => arguments[0];
+      arr(); // 1
+      function foo(n) {
+         var f = () => arguments[0] + n; // 隐式绑定 foo 函数的 arguments 对象. arguments[0] 是 n
+         return f();
+      }
+      foo(1); // 2
+      ```
+      如上所述，箭头函数表达式对非方法函数是最合适的。让我们看看当我们试着把它们作为方法时发生了什么。
+      ```javascript
+      'use strict';
+      var obj = {
+         i: 10,
+         b: () => console.log(this.i, this),
+         c: function() {
+            console.log( this.i, this)
+         }
+      }
+      obj.b(); 
+      // undefined
+      obj.c(); 
+      // 10, Object {...}
+      ```
+      箭头函数没有定义this绑定。另一个涉及Object.defineProperty()的示例：
+      ```javascript
+      'use strict';
+      var obj = {
+         a: 10
+      };
+      Object.defineProperty(obj, "b", {
+         get: () => {
+            console.log(this.a, typeof this.a, this);
+            return this.a+10; 
+            // 代表全局对象 'Window', 因此 'this.a' 返回 'undefined'
+         }
+      });
+      obj.b; // undefined   "undefined"   Window {postMessage: ƒ, blur: ƒ, focus: ƒ, close: ƒ, frames: Window, …}
+      ```
+   4. 原型链  class <br>
+      - class<br>
+         https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Classes<br>
+         
 
 
 
