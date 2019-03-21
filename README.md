@@ -316,4 +316,36 @@
 5. dva <br>
    https://dvajs.com/guide/concepts.html#%E6%95%B0%E6%8D%AE%E6%B5%81%E5%90%91 <br>
 
+
+### 双向数据绑定
+
+1. 双向数据绑定 <br>
+   双向数据绑定指的是将对象属性变化绑定到UI，或者反之。换句话说，如果我们有一个拥有name属性的user对象，当我们给user.name赋予一个新值是UI也会相应的显示新的名字。同样的，如果UI包括了一个输入字段用来输入用户名，输入一个新的值会导致user对象中的那么属性发生变化。<br>
+   双向数据绑定底层的思想非常的基本，它可以被压缩成为三个步骤：<br>
+   1. 我们需要一个方法来识别哪个UI元素被绑定了相应的属性
+   2. 我们需要监视属性和UI元素的变化
+   3. 我们需要将所有变化传播到绑定的对象和元素<br>
+
+   虽然实现的方法有很多，但是最简单也是最有效的途径是使用发布者-订阅者模式。思想很简单：<br>
+   我们可以使用自定义的data属性在HTML代码中指明绑定。所有绑定起来的JavaScript对象以及DOM元素都将“订阅”一个发布者对象。任何时候如果JavaScript对象或者一个HTML输入字段被侦测到发生了变化，我们将代理事件到发布者-订阅者模式，这会反过来将变化广播并传播到所有绑定的对象和元素。
+   - 实现发布-订阅模式  /mvvm/jq.html      /mvvm/nojq.html
+   * 脏值检查 <br>
+      angular.js 是通过脏值检测的方式比对数据是否有变更，来决定是否更新视图，最简单的方式就是通过 setInterval() 定时轮询检测数据变动，当然Google不会这么low，angular只有在指定的事件触发时进入脏值检测，大致如下：<br>
+      * DOM事件，譬如用户输入文本，点击按钮等。( ng-click )
+      * XHR响应事件 ( $http )
+      * 浏览器Location变更事件 ( $location )
+      * Timer事件( $timeout , $interval )
+      * 执行 $digest() 或 $apply()
+   * 数据劫持<br>
+      vue.js 则是采用数据劫持结合发布者-订阅者模式的方式，通过Object.defineProperty()来劫持各个属性的setter，getter，在数据变动时发布消息给订阅者，触发相应的监听回调。<br>
+      已经了解到vue是通过数据劫持的方式来做数据绑定的，其中最核心的方法便是通过Object.defineProperty()来实现对属性的劫持，达到监听数据变动的目的，无疑这个方法是本文中最重要、最基础的内容之一，如果不熟悉defineProperty，猛戳[[MDN]](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)<br>
+      1. 实现一个数据监听器Observer，能够对数据对象的所有属性进行监听，如有变动可拿到最新值并通知订阅者
+      2. 实现一个指令解析器Compile，对每个元素节点的指令进行扫描和解析，根据指令模板替换数据，以及绑定相应的更新函数
+      3. 实现一个Watcher，作为连接Observer和Compile的桥梁，能够订阅并收到每个属性变动的通知，执行指令绑定的相应回调函数，从而更新视图
+      4. mvvm入口函数，整合以上三者<br>
+      流程如图
+      <div align="center"> <img src="./imgs/vuemvvm.png" width="375" height="auto" alt="mvvm图示" /></div>
+      相关代码 /mvvm/vue_dd.html
+
+
    
