@@ -347,5 +347,9 @@
       <div align="center"> <img src="./imgs/vuemvvm.png" width="375" height="auto" alt="mvvm图示" /></div>
       相关代码 /mvvm/vue_dd.html
 
+### css三栏布局及一些function
+   [[here]](./test.html.txt)
+
+
 
    
