@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/javascript">
+		const app = document.getElementById('app');
+		for(let i=0; i<100000; i++) {
+			let span = document.createElement("span");
+			span.innerText = i;
+			span.className = "st";
+			app.appendChild(span)
+		}
+	</script>
+	<!-- <script type="text/javascript">
+		let pf = window.performance;
+		pf.mark("getElementsByClassName_start");
+		let spans = document.getElementsByClassName("st");
+		pf.mark("getElementsByClassName_end");
+		performance.mark("loop_getElementsByClassName_start");
+		let length = spans.length
+		for(let i=0; i<length; i++) {
+			spans[i].textContent
+		}
+		pf.mark("loop_getElementsByClassName_end");
+		pf.measure("getElementsByClassName", "getElementsByClassName_start", "getElementsByClassName_end");
+		pf.measure("loop_getElementsByClassName", "loop_getElementsByClassName_start", "loop_getElementsByClassName_end");
+		let getElementsByClassName = pf.getEntriesByName("getElementsByClassName");
+		pf.getEntriesByType("measure").forEach(({name, duration})=>{
+    	console.log(`${name}:耗时${duration}毫秒`);
+		});
+	</script> -->
+	<script type="text/javascript">
+		let pf = window.performance;
+		pf.mark("querySelectorAll_start");
+		let spans = document.getElementsByClassName("st");
+		pf.mark("querySelectorAll_end");
+		performance.mark("loop_querySelectorAll_start");
+		let length = spans.length
+		for(let i=0; i<length; i++) {
+			spans[i].textContent;
+		}
+		pf.mark("loop_querySelectorAll_end");
+		pf.measure("querySelectorAll", "querySelectorAll_start", "querySelectorAll_end");
+		pf.measure("loop_querySelectorAll", "loop_querySelectorAll_start", "loop_querySelectorAll_end");
+		let querySelectorAll = pf.getEntriesByName("querySelectorAll");
+		pf.getEntriesByType("measure").forEach(({name, duration})=>{
+    	console.log(`${name}:耗时${duration}毫秒`);
+		});
+	</script>
+</body>
+</html>
